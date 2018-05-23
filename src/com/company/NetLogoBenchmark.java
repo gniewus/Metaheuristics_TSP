@@ -21,10 +21,9 @@ public class NetLogoBenchmark {
             App.app().command("tsp2018Map");
             App.app().command("set population-size 100");
             App.app().command("set number-of-cycles 100");
-
             App.app().command("set tournament-size 15");
             App.app().command("set crossover-rate 50.0");
-            App.app().command("set number-of-cycles 100");
+            App.app().command("set mutation-rate 15.0");
 
             App.app().command("setup");
             App.app().command("go");
@@ -46,7 +45,7 @@ public class NetLogoBenchmark {
                 bestResult = String.valueOf(App.app().report("get-best-result"));
                 bestFitness = String.valueOf(App.app().report("get-best-fitness"));
                 System.out.println(best + " " + av + " " + min +" " + bestResult + " "+ bestFitness);
-                App.app().command("repeat 10 [go]");
+                App.app().command("go");
                 counter++;
                 // App.app().command("update_stats");
 
