@@ -1,5 +1,7 @@
+package com.company;
+
 import org.nlogo.headless.HeadlessWorkspace;
-public class Example2 {
+public class NetLogoHeadless {
     public static void main(String[] argv) {
         HeadlessWorkspace workspace =
                 HeadlessWorkspace.newInstance() ;

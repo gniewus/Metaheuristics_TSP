@@ -1,6 +1,8 @@
+package com.company;
+
 import org.nlogo.app.App;
 
-public class Example1 {
+public class NetLogoBenchmark {
     public static void main(String[] argv) {
         App.main(argv);
         try {
@@ -9,7 +11,7 @@ public class Example1 {
                         public void run() {
                             try {
                                 App.app().open(
-                                        "./Classic Traveling Salesman_2018_unkommentiert.nlogo");
+                                        "./Classic Traveling Salesman_2018_kommentiert.nlogo");
                             } catch (java.io.IOException ex) {
                                 ex.printStackTrace();
                             }
@@ -20,6 +22,10 @@ public class Example1 {
             App.app().command("set population-size 100");
             App.app().command("set number-of-cycles 100");
 
+            App.app().command("set tournament-size 15");
+            App.app().command("set crossover-rate 50.0");
+            App.app().command("set number-of-cycles 100");
+
             App.app().command("setup");
             App.app().command("go");
             //App.app().command("calculate-distance");
@@ -27,17 +33,26 @@ public class Example1 {
             //App.app().command("update_stats");
 
             String av = "";
-            String max = "";
+            String best = "499";
             String min = "";
+            String bestResult = "";
+            String bestFitness = "";
 
-            while (av == "") {
+            int counter=0;
+            while (counter < 500 ) {
                 av = String.valueOf(App.app().report("get-avg"));
-                max = String.valueOf(App.app().report("get-best"));
+                best = String.valueOf(App.app().report("get-best"));
                 min = String.valueOf(App.app().report("get-worst"));
-                System.out.println(max + " " + av + " " + min);
-                App.app().command("repeat 50 [go]");
+                bestResult = String.valueOf(App.app().report("get-best-result"));
+                bestFitness = String.valueOf(App.app().report("get-best-fitness"));
+                System.out.println(best + " " + av + " " + min +" " + bestResult + " "+ bestFitness);
+                App.app().command("repeat 10 [go]");
+                counter++;
                 // App.app().command("update_stats");
+
             }
+
+
             System.out.println("Ende");
 
         } catch (Exception ex) {

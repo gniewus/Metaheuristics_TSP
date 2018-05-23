@@ -1002,7 +1002,7 @@ number-of-cycles
 number-of-cycles
 8
 10000
-0.0
+100.0
 2
 1
 NIL
@@ -1051,7 +1051,7 @@ tournament-size
 tournament-size
 2
 10
-0.0
+15.0
 1
 1
 NIL
@@ -1088,7 +1088,7 @@ crossover-rate
 crossover-rate
 0
 100
-0.0
+50.0
 1
 1
 NIL

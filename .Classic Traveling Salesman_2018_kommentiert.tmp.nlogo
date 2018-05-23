@@ -214,7 +214,7 @@ to go
                                                 set global-min-string [string] of winner]]
 
   ;;um zwischendurch die beste gefundene Lösung zu zeichnen:
-  if show-best-solution-at-each-x-iteration > 0
+  if  > 0
   [if ticks mod show-best-solution-at-each-x-iteration = 1 [draw-shortest-path-during-runtime]] ;;mindestens eine Iteration muss komplett durchlaufen werden
 
   ;;erhöhe den Iterationszähler um 1 und zeichne die Fitness-Plots
