@@ -1,5 +1,6 @@
 package com.company;
 
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 import org.nlogo.headless.HeadlessWorkspace;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ public class NetLogoHeadless {
     public static void main(String[] argv) {
         try {
             WORKSPACE.open(//"./Classic Traveling Salesman_2018_kommentiert.nlogo");
-                    "src/models/Classic Traveling Salesman_2018_kommentiert.nlogo");
+                    "./Classic Traveling Salesman_2018_kommentiert.nlogo");
 
             executeAllParameterCombinations();
 
@@ -26,8 +27,11 @@ public class NetLogoHeadless {
         int[] populationSizes = createParamArray(3, 1000, 3);
         int[] tournamentSizes = createParamArray(2, 10, 3);
         int[] mutationsRates = createParamArray(1, 30, 3);
-        int[] crossoverRates = createParamArray(0, 100, 3);
+        int[] crossoverRates = createParamArray(1, 100, 3);
         int[] numbersOfCycles = createParamArray(8, 1000, 6);
+        String[] swapMutations = {"false","true"};
+        String[] preserveCommonLinks = {"false","true"};
+
 
         System.out.println("popSize ; tournament ; mutation ; crossover ; numOfCycles ; "
                 + "duration ; best ; av ; worst ; bestFitness ; bestResult ;");
@@ -40,7 +44,11 @@ public class NetLogoHeadless {
                     if (populationSize >= tournamentSize) {
                     for (int mutationRate : mutationsRates) {
                         for (int crossoverRate : crossoverRates) {
-                            execute(populationSize, tournamentSize, mutationRate, crossoverRate, numbersOfCycles);
+                            for(String preserveCommonLink: preserveCommonLinks){
+                                for(String swapMutation: swapMutations){
+                                    execute(swapMutation,preserveCommonLink,populationSize, tournamentSize, mutationRate, crossoverRate, numbersOfCycles);
+                                }
+                            }
                         }
                     }
                 }
@@ -49,7 +57,10 @@ public class NetLogoHeadless {
         System.out.println("Gesamtdauer: " + (System.currentTimeMillis()-startTime) / 1000 + " Sec.");
     }
 
-    private static void execute(int popSize, int tournament, double mutation, int crossover, int[] numbersOfCycles) throws InterruptedException {
+    private static void execute(String swapMutations,String preserveCommonLinks,int popSize, int tournament, double mutation, int crossover, int[] numbersOfCycles) throws InterruptedException {
+
+        WORKSPACE.command("set swap-mutation? " + swapMutations);
+        WORKSPACE.command("set preserve-common-links? " + preserveCommonLinks);
 
         WORKSPACE.command("set population-size " + popSize);
         WORKSPACE.command("set tournament-size " + tournament);
