@@ -25,9 +25,9 @@ public class NetLogoHeadless {
         // build param arrays
         int[] populationSizes = createParamArray(3, 1000, 3);
         int[] tournamentSizes = createParamArray(2, 10, 3);
-        int[] mutationsRates = createParamArray(0, 30, 3);
+        int[] mutationsRates = createParamArray(1, 30, 3);
         int[] crossoverRates = createParamArray(0, 100, 3);
-        int[] numbersOfCycles = createParamArray(8, 1000, 101);
+        int[] numbersOfCycles = createParamArray(8, 1000, 6);
 
         System.out.println("popSize ; tournament ; mutation ; crossover ; numOfCycles ; "
                 + "duration ; best ; av ; worst ; bestFitness ; bestResult ;");
@@ -40,7 +40,7 @@ public class NetLogoHeadless {
                     if (populationSize >= tournamentSize) {
                     for (int mutationRate : mutationsRates) {
                         for (int crossoverRate : crossoverRates) {
-                            //execute(populationSize, tournamentSize, crossoverRate, mutationRate, numbersOfCycles);
+                            execute(populationSize, tournamentSize, mutationRate, crossoverRate, numbersOfCycles);
                         }
                     }
                 }
