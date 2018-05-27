@@ -33,7 +33,7 @@ public class NetLogoHeadless {
         String[] swapMutations = {"false","true"};
         String[] preserveCommonLinks = {"false","true"};
 
-        System.out.println("popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; numOfCycles ; "
+        System.out.println("id ; popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; preserveCommonLink ; swapMutation ; numOfCycles ; "
                 + "duration ; best ; av ; worst ; bestFitness ; bestResult ;");
 
         long startTime = System.currentTimeMillis();
