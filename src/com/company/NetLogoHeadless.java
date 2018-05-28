@@ -25,13 +25,19 @@ public class NetLogoHeadless {
 
     private static void executeAllParameterCombinations() throws InterruptedException, IOException {
         // build param arrays
-        int[] populationSizes = createParamArray(3, 1000, 3);
+        int[] populationSizes = createParamArray(25, 1000, 4);
         int[] tournamentSizes = createParamArray(2, 10, 3);
         int[] mutationsRates = createParamArray(1, 30, 3);
         int[] crossoverRates = createParamArray(1, 100, 3);
-        int[] numbersOfCycles = createParamArray(8, 100, 6);
-        String[] swapMutations = {"false","true"};
-        String[] preserveCommonLinks = {"false","true"};
+        int[] numbersOfCycles = createParamArray(10, 1000, 10);
+        String[] swapMutations = {
+                                    "false",
+                                    "true"
+        };
+        String[] preserveCommonLinks = {
+                                        "false",
+                                        "true"
+                                        };
 
         System.out.println("id ; popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; preserveCommonLink ; swapMutation ; numOfCycles ; "
                 + "duration ; best ; av ; worst ; bestFitness ; bestResult ;");
