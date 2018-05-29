@@ -39,8 +39,8 @@ public class NetLogoHeadless {
                                         "true"
                                         };
 
-        System.out.println("id ; popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; preserveCommonLink ; swapMutation ; numOfCycles ; "
-                + "duration ; best ; av ; worst ; bestFitness ; bestResult ;");
+        System.out.println("id ; popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; numOfCycles ; "
+                + "duration ; best ; av ; worst ; bestFitness ; bestResult");
 
         long startTime = System.currentTimeMillis();
         int idCounter = 0;
