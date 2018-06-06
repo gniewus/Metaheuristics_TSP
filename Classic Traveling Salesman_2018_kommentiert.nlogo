@@ -328,7 +328,12 @@ to create-new-generation
   ;;(siehe unter File -> Models Library -> Computer Science -> Simple Genetic Algorithm)
   ;;<<<<<<<<<
 
-  ask turtles [
+  let turtles-to-replace turtles
+  if use-elitism?
+      ;;create a set with all turtles except the winner if elitism is used -> the winner will not be replaced
+      [set turtles-to-replace turtles with [self != winner]]
+
+  ask turtles-to-replace [
 
   if random-float 100.0 < crossover-rate[
   ;; falls eine zufällig gezogene Zahl bis 100 unterhalb der voreingestellten Crossover-Rate liegt, dann soll die bestehende Lösung durch eine neue ersetzt werden
@@ -710,7 +715,12 @@ ask turtles [
   set string remove-item 0 string
   set string remove-item 20 string]
 
-ask turtles [
+  let mutation-turtles turtles
+  if use-elitism?
+      ;;create a set with all turtles except the winner if elitism is used -> the winner will not mutate
+      [set mutation-turtles turtles with [self != winner]]
+
+ask mutation-turtles [
 
  ifelse swap-mutation?
 
@@ -1107,7 +1117,7 @@ population-size
 population-size
 3
 1000
-100.0
+10.0
 1
 1
 NIL
@@ -1122,7 +1132,7 @@ mutation-rate
 mutation-rate
 0
 30
-0.0
+30.0
 .1
 1
 NIL
@@ -1158,7 +1168,7 @@ number-of-cycles
 number-of-cycles
 8
 10000
-100.0
+1000.0
 2
 1
 NIL
@@ -1207,7 +1217,7 @@ tournament-size
 tournament-size
 2
 10
-15.0
+2.0
 1
 1
 NIL
@@ -1327,6 +1337,17 @@ end-time
 17
 1
 11
+
+SWITCH
+205
+107
+324
+140
+use-elitism?
+use-elitism?
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -1785,7 +1806,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.2
+NetLogo 6.0.3
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
