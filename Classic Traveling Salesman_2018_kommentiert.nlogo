@@ -331,12 +331,7 @@ to create-new-generation
   ;;(siehe unter File -> Models Library -> Computer Science -> Simple Genetic Algorithm)
   ;;<<<<<<<<<
 
-  let turtles-to-replace turtles
-  if use-elitism?
-      ;;create a set with all turtles except the winner if elitism is used -> the winner will not be replaced
-      [set turtles-to-replace turtles with [self != winner]]
-
-  ask turtles-to-replace [
+  ask turtles-without-elites [
 
   if random-float 100.0 < crossover-rate[
   ;; falls eine zufällig gezogene Zahl bis 100 unterhalb der voreingestellten Crossover-Rate liegt, dann soll die bestehende Lösung durch eine neue ersetzt werden
@@ -638,6 +633,20 @@ to-report roulette-wheel-selection
     report selected-turtle
 end
 
+;;create a set with all turtles except the elites
+to-report turtles-without-elites
+  let result-turtles turtles
+  if nr-of-elites > 0 [
+      let counter 0
+      while [counter < nr-of-elites] [
+          let curr-winner min-one-of result-turtles [fitness]
+          set result-turtles result-turtles with [self != curr-winner]
+          set counter counter + 1
+      ]
+  ]
+  report result-turtles
+end
+
 ;;Prozedur für den Edge Recombination Crossover zur Listenverwaltung
 to-report shortest [n wholelist]
 
@@ -745,12 +754,7 @@ ask turtles [
   set string remove-item 0 string
   set string remove-item 20 string]
 
-  let mutation-turtles turtles
-  if use-elitism?
-      ;;create a set with all turtles except the winner if elitism is used -> the winner will not mutate
-      [set mutation-turtles turtles with [self != winner]]
-
-ask mutation-turtles [
+ask turtles-without-elites [
 
  ifelse swap-mutation?
 
@@ -1144,7 +1148,7 @@ population-size
 population-size
 3
 1000
-300.0
+3.0
 1
 1
 NIL
@@ -1237,9 +1241,9 @@ NIL
 
 SLIDER
 9
-74
+42
 205
-107
+75
 tournament-size
 tournament-size
 2
@@ -1289,9 +1293,9 @@ HORIZONTAL
 
 SWITCH
 204
-74
-403
 107
+403
+140
 swap-mutation?
 swap-mutation?
 0
@@ -1300,9 +1304,9 @@ swap-mutation?
 
 SWITCH
 204
-42
-403
 75
+403
+108
 preserve-common-links?
 preserve-common-links?
 0
@@ -1366,26 +1370,30 @@ end-time
 11
 
 SWITCH
-205
-107
+204
+42
 403
-140
-use-elitism?
-use-elitism?
+75
+use-roulette-wheel-selection?
+use-roulette-wheel-selection?
 0
 1
 -1000
 
-SWITCH
+SLIDER
 9
-43
-205
-76
-use-roulette-wheel-selection?
-use-roulette-wheel-selection?
+74
+204
+107
+nr-of-elites
+nr-of-elites
 0
+10
+2.0
 1
--1000
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
