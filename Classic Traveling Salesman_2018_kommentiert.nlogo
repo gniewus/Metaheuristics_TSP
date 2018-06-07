@@ -164,6 +164,9 @@ to setup
    ;;>>>> das muss nicht zwangsläufig hier geschehen, sondern wäre (!!je nach Implementierung der Prozedur "calculate-distance"!!) ein paar Zeilen weiter unten besser aufgehoben <<<<<<
    set string fput 0 string;;dies könnte auch erst nach calculate-distance geschehen
    set string lput 0 string;;dies könnte auch erst nach calculate-distance geschehen
+
+   ;; if roulette-wheel-selection tournament-size isn't used, so it is set to 0
+   if use-roulette-wheel-selection? [set tournament-size 0]
  ]
 
   set string-drawn ""
@@ -338,21 +341,30 @@ to create-new-generation
   if random-float 100.0 < crossover-rate[
   ;; falls eine zufällig gezogene Zahl bis 100 unterhalb der voreingestellten Crossover-Rate liegt, dann soll die bestehende Lösung durch eine neue ersetzt werden
 
-  ; if we simply wrote "LET OLD-GENERATION TURTLES",
-  ; then OLD-GENERATION would mean the set of all turtles, and when
-  ; new solutions were created, they would be added to the breed, and
-  ; OLD-GENERATION would also grow.  Since we don't want it to grow,
-  ; we instead write "TURTLES WITH [TRUE]", which makes OLD-GENERATION
-  ; an agentset, which doesn't get updated when new solutions are created.
-  let old-generation turtles with [true]
 
-  ;;Turnierbasierte Selektion zur Auswahl der beiden Elternpaare:
-  ;; für die beiden  Elternteile weren jeweils so viele Lösungen zufällig ausgewählt, wie durch die "tournament-size" vorgegeben wird
-  ;; diese Lösungen werden dann anhand der Fitness bewertet und jeweils diejenige mit der besten Fitness (hier: geringste Tourlänge) ausgewählt
-  ;;>>>>>> sollte die Fitnessbewertung angepasst worden sein, ist hier zu prüfen, ob statt "min-one-of" besser "max-one-of" zu wählen ist <<<<<<
-  let parent1-p min-one-of (n-of tournament-size old-generation) [fitness]
-  let parent2-p min-one-of (n-of tournament-size old-generation) [fitness]
-  ;;>>>>>> wenn die Selektionsmethode geändert wird, wäre statt der obigen Zeilen eine Anpassung bzw. Neuimplementierung erforderlich <<<<<<
+  let parent1-p turtle 0
+  let parent2-p turtle 0
+  ifelse use-roulette-wheel-selection? [
+    set parent1-p roulette-wheel-selection
+    set parent2-p roulette-wheel-selection
+  ][
+    ; if we simply wrote "LET OLD-GENERATION TURTLES",
+    ; then OLD-GENERATION would mean the set of all turtles, and when
+    ; new solutions were created, they would be added to the breed, and
+    ; OLD-GENERATION would also grow.  Since we don't want it to grow,
+    ; we instead write "TURTLES WITH [TRUE]", which makes OLD-GENERATION
+    ; an agentset, which doesn't get updated when new solutions are created.
+    let old-generation turtles with [true]
+
+    ;;Turnierbasierte Selektion zur Auswahl der beiden Elternpaare:
+    ;; für die beiden  Elternteile weren jeweils so viele Lösungen zufällig ausgewählt, wie durch die "tournament-size" vorgegeben wird
+    ;; diese Lösungen werden dann anhand der Fitness bewertet und jeweils diejenige mit der besten Fitness (hier: geringste Tourlänge) ausgewählt
+    ;;>>>>>> sollte die Fitnessbewertung angepasst worden sein, ist hier zu prüfen, ob statt "min-one-of" besser "max-one-of" zu wählen ist <<<<<<
+    set parent1-p min-one-of (n-of tournament-size old-generation) [fitness]
+    set parent2-p min-one-of (n-of tournament-size old-generation) [fitness]
+    ;;>>>>>> wenn die Selektionsmethode geändert wird, wäre statt der obigen Zeilen eine Anpassung bzw. Neuimplementierung erforderlich <<<<<<
+  ]
+
 
   ;;>>>>>>Beginn des Edge Recombination Crossover
   ;;>>>>>>wenn Crossover-Operator geändert wird, wäre hier eine Anpassung nötig
@@ -607,6 +619,24 @@ set x 0
 
 end
 
+to-report roulette-wheel-selection
+    let old-generation turtles with [true]
+    let fitness-sum sum [fitness] of old-generation
+    let worst-fitness [fitness] of max-one-of old-generation [fitness]
+    ;; We need an adjusted fitness sum, because the fitness is originally better if small
+    let adjusted-fitness-sum count old-generation * worst-fitness - fitness-sum
+    let random-picker random-float adjusted-fitness-sum
+    let fitness-counter 0.0
+    let turtle-counter 0
+    let selected-turtle turtle 0
+    while [fitness-counter < random-picker] [
+        set selected-turtle turtle turtle-counter
+        ;; adds the difference of the current fitness and the worst fitness to the fitness counter
+        set fitness-counter fitness-counter + worst-fitness - [fitness] of selected-turtle
+        set turtle-counter turtle-counter + 1
+    ]
+    report selected-turtle
+end
 
 ;;Prozedur für den Edge Recombination Crossover zur Listenverwaltung
 to-report shortest [n wholelist]
@@ -1029,9 +1059,6 @@ to draw-shortest-path-during-runtime
 end
 
 
-
-
-
 ;                                                               Originally Designed and created by Wes Hileman
 ;
 ;                                                                          Colorado Springs, CO
@@ -1117,7 +1144,7 @@ population-size
 population-size
 3
 1000
-10.0
+300.0
 1
 1
 NIL
@@ -1125,24 +1152,24 @@ HORIZONTAL
 
 SLIDER
 9
-74
+106
 205
-107
+139
 mutation-rate
 mutation-rate
 0
 30
-30.0
+15.0
 .1
 1
 NIL
 HORIZONTAL
 
 PLOT
-8
-195
-484
-450
+15
+271
+491
+526
 fitness-plot
 time
 fitness
@@ -1161,9 +1188,9 @@ PENS
 
 SLIDER
 9
-107
+139
 205
-140
+172
 number-of-cycles
 number-of-cycles
 8
@@ -1210,24 +1237,24 @@ NIL
 
 SLIDER
 9
-42
+74
 205
-75
+107
 tournament-size
 tournament-size
 2
 10
-2.0
+0.0
 1
 1
 NIL
 HORIZONTAL
 
 MONITOR
-8
-149
-136
-194
+15
+225
+143
+270
 Best Global Fitness
 global-min-fitness
 1
@@ -1235,10 +1262,10 @@ global-min-fitness
 11
 
 MONITOR
-134
-149
-484
-194
+141
+225
+491
+270
 Best Global Solution
 global-min-string
 17
@@ -1254,7 +1281,7 @@ crossover-rate
 crossover-rate
 0
 100
-50.0
+100.0
 1
 1
 NIL
@@ -1310,7 +1337,7 @@ show-best-solution-at-each-x-iteration
 show-best-solution-at-each-x-iteration
 10
 100
-0.0
+10.0
 10
 1
 NIL
@@ -1341,10 +1368,21 @@ end-time
 SWITCH
 205
 107
-324
+403
 140
 use-elitism?
 use-elitism?
+0
+1
+-1000
+
+SWITCH
+9
+43
+205
+76
+use-roulette-wheel-selection?
+use-roulette-wheel-selection?
 0
 1
 -1000
