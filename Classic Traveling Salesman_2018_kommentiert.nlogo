@@ -357,7 +357,8 @@ to create-new-generation
   ]
 
   if environmental-selection? [
-    ;;  create a clone of the turtle which will be replaced by a new born child
+    ;; create a clone of the turtle which will be replaced by a new born child
+    ;; this is necessary to enable environmental selction (there have to be more turtles after the crossover select afterwards
     hatch 1
   ]
 
@@ -606,7 +607,8 @@ set x 0
 
   ]]
 
-  output-print count turtles
+  ;; the environmental selection uses tournament selection
+  ;; it kills turtles till there are as many turtles alive as population-size defines
   if environmental-selection? [
     let ordinary-turtles turtles-without-elites
     while [count turtles > population-size][
@@ -615,7 +617,6 @@ set x 0
       ]
     ]
   ]
-  output-print count turtles
 
   ;; Start- und Endort werden wieder den einzelnen Lösungen hinzugefügt
   ask turtles [set string fput 0 string
