@@ -333,7 +333,6 @@ to create-new-generation
   if random-float 100.0 < crossover-rate[
   ;; falls eine zufällig gezogene Zahl bis 100 unterhalb der voreingestellten Crossover-Rate liegt, dann soll die bestehende Lösung durch eine neue ersetzt werden
 
-
   let parent1-p turtle 0
   let parent2-p turtle 0
   ifelse use-roulette-wheel-selection? [
@@ -357,6 +356,10 @@ to create-new-generation
     ;;>>>>>> wenn die Selektionsmethode geändert wird, wäre statt der obigen Zeilen eine Anpassung bzw. Neuimplementierung erforderlich <<<<<<
   ]
 
+  if environmental-selection? [
+    ;;  create a clone of the turtle which will be replaced by a new born child
+    hatch 1
+  ]
 
   ;;>>>>>>Beginn des Edge Recombination Crossover
   ;;>>>>>>wenn Crossover-Operator geändert wird, wäre hier eine Anpassung nötig
@@ -602,6 +605,18 @@ set x 0
  calculate-fitness
 
   ]]
+
+  output-print count turtles
+  if environmental-selection? [
+    let ordinary-turtles turtles-without-elites
+    while [count turtles > population-size][
+      ask max-one-of (n-of tournament-size ordinary-turtles) [fitness] [
+        die
+      ]
+    ]
+  ]
+  output-print count turtles
+
   ;; Start- und Endort werden wieder den einzelnen Lösungen hinzugefügt
   ask turtles [set string fput 0 string
                set string lput 0 string]
@@ -1147,7 +1162,7 @@ population-size
 population-size
 3
 1000
-3.0
+284.0
 1
 1
 NIL
@@ -1247,7 +1262,7 @@ tournament-size
 tournament-size
 2
 10
-0.0
+10.0
 1
 1
 NIL
@@ -1284,7 +1299,7 @@ crossover-rate
 crossover-rate
 0
 100
-100.0
+50.0
 1
 1
 NIL
@@ -1388,11 +1403,22 @@ nr-of-elites
 nr-of-elites
 0
 10
-2.0
+5.0
 1
 1
 NIL
 HORIZONTAL
+
+SWITCH
+205
+139
+403
+172
+environmental-selection?
+environmental-selection?
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
