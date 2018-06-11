@@ -164,9 +164,6 @@ to setup
    ;;>>>> das muss nicht zwangsläufig hier geschehen, sondern wäre (!!je nach Implementierung der Prozedur "calculate-distance"!!) ein paar Zeilen weiter unten besser aufgehoben <<<<<<
    set string fput 0 string;;dies könnte auch erst nach calculate-distance geschehen
    set string lput 0 string;;dies könnte auch erst nach calculate-distance geschehen
-
-   ;; if roulette-wheel-selection tournament-size isn't used, so it is set to 0
-   if use-roulette-wheel-selection? [set tournament-size 0]
  ]
 
   set string-drawn ""
