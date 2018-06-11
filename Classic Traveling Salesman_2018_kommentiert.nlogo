@@ -622,13 +622,15 @@ to-report roulette-wheel-selection
     let adjusted-fitness-sum count old-generation * worst-fitness - fitness-sum
     let random-picker random-float adjusted-fitness-sum
     let fitness-counter 0.0
-    let turtle-counter 0
     let selected-turtle turtle 0
-    while [fitness-counter < random-picker] [
-        set selected-turtle turtle turtle-counter
+    let found false
+    ask old-generation [
         ;; adds the difference of the current fitness and the worst fitness to the fitness counter
-        set fitness-counter fitness-counter + worst-fitness - [fitness] of selected-turtle
-        set turtle-counter turtle-counter + 1
+        set fitness-counter fitness-counter + worst-fitness - fitness;] of selected-turtle
+        if fitness-counter >= random-picker and not found [
+          set selected-turtle self
+          set found true
+        ]
     ]
     report selected-turtle
 end
