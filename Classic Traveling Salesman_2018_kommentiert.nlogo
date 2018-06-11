@@ -64,6 +64,7 @@ globals [
   global-min-fitness ;;bester bekannter Fitnesswert (hier: kürzeste Rundreise), wird auch im Interface angezeigt
   global-min-string  ;;beste Rundreise (hier: die kürzeste), wird auch im Interface angezeigt
   winner             ;;the turtle with the best fitness
+  fitness-of-winner  ;;the fitness of the curr winner (should be stored seperatly, in case the winner dies)
   looser             ;;turtle with worst fitness
   string-drawn;;     ;;welche Rundreise zuvor auf der Map gezeichnet wurde (wird benötigt, um die Zeichnung zu aktualisieren und die alte Rundreise auszuradieren)
   start-time;;       ;;speichert die Uhrzeit und das Datum, wenn Algorithmus gestartet wird, wird auch im Interface angezeigt
@@ -210,7 +211,7 @@ to go
   ;;es wird geprüft, ob der Lösungswert der besten Lösung aus der neuen Generation die bisher beste bekannte Lösung übertrifft
   ;;ist dies der Fall, wird die beste bekannte Lösung mit der aktuellen Lösung überschrieben
   if ticks > 0
-  [if [fitness] of winner < global-min-fitness [set global-min-fitness [fitness] of winner
+  [if fitness-of-winner < global-min-fitness [set global-min-fitness [fitness] of winner
                                                 set global-min-string [string] of winner]]
 
   ;;um zwischendurch die beste gefundene Lösung zu zeichnen:
@@ -297,6 +298,7 @@ end
 to calculate-fitness
     set fitness pdistance                   ;;The real fitness function is the distance procedure above, here we just tell the program that pdistance = fitness.
     set winner min-one-of turtles [fitness] ;;in this case the winner is the turtle traveling the least distance
+    set fitness-of-winner [fitness] of winner
     set looser max-one-of turtles [fitness] ;;  hier wird auch das schlechteste Individuum gespeichert (im weiteren Verlauf bisher aber nicht wirklich verwendet)
 end
 ;;>>>>>>>>
