@@ -364,7 +364,23 @@ to create-new-generation
     hatch 1
   ]
 
-  ;;>>>>>>Beginn des Edge Recombination Crossover
+
+ ifelse one-point-crossover? [
+        let parent1 [string] of parent1-p
+        let parent2 [string] of parent2-p
+        show (word "partents " parent1 parent2 )
+
+        let maxLen length parent1 - 1
+
+        let crossoverPoint random length parent1
+        let teilpermut1 substring parent1 0 crossoverPoint
+        let teilpermut2 substring parent2 crossoverPoint maxLen
+        show word teilpermut1 teilpermut2
+
+
+ ][
+
+    ;;>>>>>>Beginn des Edge Recombination Crossover
   ;;>>>>>>wenn Crossover-Operator geändert wird, wäre hier eine Anpassung nötig
   let parent1 [string] of parent1-p
   let parent2 [string] of parent2-p
@@ -377,13 +393,15 @@ to create-new-generation
 
     ; first item
     if x = 0 [
-      set sl lput item  x parent1 sl
-      set sl lput item (x + 1) parent1 sl
 
-      let l length parent1 - 1
+      set sl lput item  x parent1 sl ;; add 1st city of parent1 to SL
+      set sl lput item (x + 1) parent1 sl ;; add 2nd city of parent1 to SL
 
-      set sl lput (item l parent1) sl
-      set edgetable1 lput sl edgetable1
+      let l length parent1 - 1 ;; len of partent1
+
+      set sl lput (item l parent1) sl ;; add last item of parent1 to sl
+      set edgetable1 lput sl edgetable1 ;; add contents of sl to edgetable1
+      show word "Sl is " sl
     ]
 
     ; last item
@@ -395,6 +413,7 @@ to create-new-generation
 
       set sl lput (item l parent1) sl
       set edgetable1 lput sl edgetable1
+      ;; show sl
     ]
 
     ; all other items
@@ -408,7 +427,7 @@ to create-new-generation
     set x x + 1
   ]
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Here edgetable1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   let edgetable2 []
@@ -464,7 +483,7 @@ to create-new-generation
 
         while [x < length parent1] [
 
-          if item 0 item x edgetable1 = y [set edgetable3 lput item x edgetable1 edgetable3]
+          if item 0 item x edgetable1 = y [set edgetable3 lput item x edgetable1 edgetable3] ;; if first item of the edgetable1 is
 
           set x x + 1
         ]
@@ -601,7 +620,7 @@ set x 0
  ;;<<<<<<wenn Crossover-Operator geändert wird, wäre hier eine Anpassung nötig
  ;;<<<<<<Ende des Edge Recombination Crossover
 
-
+      ]
 
  ;;Bewertung der Distanz bzw. Fitness der neu erstellten Lösung
  calculate-distance
@@ -1423,6 +1442,17 @@ environmental-selection?
 1
 -1000
 
+SWITCH
+216
+190
+410
+223
+one-point-crossover?
+one-point-crossover?
+0
+1
+-1000
+
 @#$#@#$#@
 ## WHAT IS IT?
 
@@ -1880,7 +1910,7 @@ false
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 @#$#@#$#@
-NetLogo 6.0.3
+NetLogo 6.0.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
