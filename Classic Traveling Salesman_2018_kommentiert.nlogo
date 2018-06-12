@@ -330,7 +330,14 @@ to create-new-generation
   ;;(siehe unter File -> Models Library -> Computer Science -> Simple Genetic Algorithm)
   ;;<<<<<<<<<
 
-  ask turtles-without-elites [
+  ;; if environmental selection is used, turtles won't get replaced immediately during crossover
+  ;; that's why we can also iterate over elites in this case
+  let turtles-to-iterate-over turtles
+  if not environmental-selection? [
+    set turtles-to-iterate-over turtles-without-elites
+  ]
+
+  ask turtles-to-iterate-over [
 
   if random-float 100.0 < crossover-rate[
   ;; falls eine zufällig gezogene Zahl bis 100 unterhalb der voreingestellten Crossover-Rate liegt, dann soll die bestehende Lösung durch eine neue ersetzt werden
