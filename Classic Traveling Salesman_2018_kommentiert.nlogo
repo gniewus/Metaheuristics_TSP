@@ -375,14 +375,65 @@ to create-new-generation
  ifelse one-point-crossover? [
         let parent1 [string] of parent1-p
         let parent2 [string] of parent2-p
-        show (word "partents " parent1 parent2 )
 
-        let maxLen length parent1 - 1
+        ;;show (word "partents " parent1 " <> " parent2 )
+
+        let maxLen length parent1
 
         let crossoverPoint random length parent1
-        let teilpermut1 substring parent1 0 crossoverPoint
-        let teilpermut2 substring parent2 crossoverPoint maxLen
-        show word teilpermut1 teilpermut2
+        let teilpermut1 sublist parent1 0 crossoverPoint
+        let teilpermut2 sublist parent2 crossoverPoint maxLen
+
+        let joinedList teilpermut1
+
+        foreach teilpermut2 [
+          list-item ->
+            set joinedList lput list-item joinedList
+        ]
+
+        show (word "Joined " joinedList "   " teilpermut1 teilpermut2)
+        let deduplicatedList remove-duplicates joinedList
+
+
+
+  let missing []
+
+  let counter 1
+
+  repeat 20 [
+    if not member? counter joinedList [
+      set missing lput counter missing
+    ]
+    set counter counter + 1
+  ]
+
+
+
+    let already-checked []
+    let duplicates []
+
+  set counter 0
+  foreach joinedList [
+    list-item ->
+      if member? list-item already-checked [
+        set duplicates lput list-item duplicates
+        ifelse random 2 > 0 [
+          set joinedList replace-item (position list-item joinedList) joinedList first missing
+        ][
+          set joinedList replace-item counter joinedList first missing
+        ]
+        set missing remove-item 0 missing
+      ]
+      set already-checked lput list-item already-checked
+      set counter counter + 1
+  ]
+
+
+        show word "duplicates " duplicates
+
+        show word "missing elems " missing
+
+        show "============"
 
 
  ][
@@ -1191,7 +1242,7 @@ population-size
 population-size
 3
 1000
-284.0
+47.0
 1
 1
 NIL
