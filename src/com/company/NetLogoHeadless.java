@@ -24,22 +24,40 @@ public class NetLogoHeadless {
     }
 
     private static void executeAllParameterCombinations() throws InterruptedException, IOException {
-        // build param arrays
-        int[] populationSizes = createParamArray(25, 1000, 4);
-        int[] tournamentSizes = createParamArray(2, 10, 3);
-        int[] mutationsRates = createParamArray(1, 30, 3);
-        int[] crossoverRates = createParamArray(1, 100, 3);
-        int[] numbersOfCycles = createParamArray(10, 1000, 10);
+        // FESTE PARAMTER
+        int[] populationSizes = {350}; //650,100};
+        int[] tournamentSizes = {2};    //
+        int[] mutationsRates = {16};
+        int[] crossoverRates = {100};  // ,50};
+        int[] numbersOfCycles = {780};//,890};
+
+        int[] numberOfElites = {1,4,7,10};//createParamArray(10, 1000, 10);
+
         String[] swapMutations = {
-                                    "false",
+        //                            "false",
                                     "true"
         };
         String[] preserveCommonLinks = {
+          //                              "false",
+                                        "true"
+                                        };
+        String[] onePointCrossover = {
+                                        "false",
+                                        "true"
+                                        };
+        String[] environmentalSelection = {
+                                  "false",
+                                        "true"
+                                        };
+        String[] rouletteWheelSelection = {
                                         "false",
                                         "true"
                                         };
 
-        System.out.println("id ; popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; numOfCycles ; "
+
+
+
+        System.out.println("id ; onePointCrossover ; environmentalSelection ; rouletteWheelSelection ; numberOfElites ; popSize ; tournament ; mutation ; crossover ; preserveCommonLink ; swapMutation ; numOfCycles ; "
                 + "duration ; best ; av ; worst ; bestFitness ; bestResult");
 
         long startTime = System.currentTimeMillis();
@@ -53,8 +71,18 @@ public class NetLogoHeadless {
                         for (int crossoverRate : crossoverRates) {
                             for(String preserveCommonLink: preserveCommonLinks){
                                 for(String swapMutation: swapMutations){
-                                    execute(idCounter, swapMutation, preserveCommonLink, populationSize, tournamentSize, mutationRate, crossoverRate, numbersOfCycles);
-                                    idCounter += numbersOfCycles.length;
+                                    for(String onePointC: onePointCrossover){
+                                        for (String envSelection:environmentalSelection){
+                                            for(String rouletteWheel: rouletteWheelSelection){
+                                                for (int numOfElites: numberOfElites){
+                                                    execute(idCounter,onePointC,envSelection,rouletteWheel,numOfElites,swapMutation, preserveCommonLink, populationSize, tournamentSize, mutationRate, crossoverRate, numbersOfCycles);
+                                                    idCounter += numbersOfCycles.length;
+                                                }
+                                            }
+
+                                        }
+                                    }
+
                                 }
                             }
                         }
@@ -65,7 +93,15 @@ public class NetLogoHeadless {
         System.out.println("Gesamtdauer: " + (System.currentTimeMillis()-startTime) / 1000 + " Sec.");
     }
 
-    private static void execute(int id, String swapMutations, String preserveCommonLinks, int popSize, int tournament, double mutation, int crossover, int[] numbersOfCycles) throws InterruptedException {
+    private static void execute(int id,String onePointCrossover, String envSelection ,String rouletteWheel ,int numOfElites,String swapMutations, String preserveCommonLinks, int popSize, int tournament, double mutation, int crossover, int[] numbersOfCycles) throws InterruptedException {
+
+
+        //New Params
+        WORKSPACE.command("set one-point-crossover? " + onePointCrossover);
+        WORKSPACE.command("set environmental-selection? " + envSelection);
+        WORKSPACE.command("set use-roulette-wheel-selection? " + rouletteWheel);
+        WORKSPACE.command("set population-size " + numOfElites);
+
 
         WORKSPACE.command("set swap-mutation? " + swapMutations);
         WORKSPACE.command("set preserve-common-links? " + preserveCommonLinks);
