@@ -29,8 +29,7 @@ public class NetLogoHeadless {
         int[] tournamentSizes = {2};    //
         int[] mutationsRates = {16};
         int[] crossoverRates = {100};  // ,50};
-        int[] numbersOfCycles = {780};//,890};
-
+        int[] numbersOfCycles = createParamArray(10, 1000, 10);
         int[] numberOfElites = {1,4,7,10};//createParamArray(10, 1000, 10);
 
         String[] swapMutations = {
@@ -116,7 +115,7 @@ public class NetLogoHeadless {
 
         double lastBestFitness = 1000.0;
         for (int i = 0; i < numbersOfCycles.length; i++) {
-            String params = (id+i) + " ; " + popSize + " ; " + tournament + " ; " + mutation + " ; " + crossover + " ; " + preserveCommonLinks + " ; " + swapMutations + " ; " + numbersOfCycles[i] + " ; " ;
+            String params = (id+i) +";"+ onePointCrossover+";"+envSelection+";"+rouletteWheel+";"+numOfElites+";" + popSize + " ; " + tournament + " ; " + mutation + " ; " + crossover + " ; " + preserveCommonLinks + " ; " + swapMutations + " ; " + numbersOfCycles[i] + " ; " ;
             String av, best, worst, bestResult = "";
             double bestFitness;
 
