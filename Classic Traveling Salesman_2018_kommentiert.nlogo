@@ -391,8 +391,8 @@ to create-new-generation
             set joinedList lput list-item joinedList
         ]
 
-        show (word "Joined " joinedList "   " teilpermut1 teilpermut2)
-        let deduplicatedList remove-duplicates joinedList
+        ;;show (word "Joined " joinedList "   " teilpermut1 teilpermut2)
+        ;;let deduplicatedList remove-duplicates joinedList
 
 
 
@@ -410,13 +410,13 @@ to create-new-generation
 
 
     let already-checked []
-    let duplicates []
+    ;;let duplicates []
 
   set counter 0
   foreach joinedList [
     list-item ->
       if member? list-item already-checked [
-        set duplicates lput list-item duplicates
+        ;;set duplicates lput list-item duplicates
         ifelse random 2 > 0 [
           set joinedList replace-item (position list-item joinedList) joinedList first missing
         ][
@@ -428,12 +428,11 @@ to create-new-generation
       set counter counter + 1
   ]
 
+        set string joinedList
 
-        show word "duplicates " duplicates
-
-        show word "missing elems " missing
-
-        show "============"
+        ;;show word "duplicates " duplicates
+        ;;show word "joined List  " joinedList
+        ;;show "============"
 
 
  ][
@@ -459,7 +458,7 @@ to create-new-generation
 
       set sl lput (item l parent1) sl ;; add last item of parent1 to sl
       set edgetable1 lput sl edgetable1 ;; add contents of sl to edgetable1
-      show word "Sl is " sl
+      ;;show word "Sl is " sl
     ]
 
     ; last item
@@ -1242,7 +1241,7 @@ population-size
 population-size
 3
 1000
-47.0
+267.0
 1
 1
 NIL
@@ -1379,7 +1378,7 @@ crossover-rate
 crossover-rate
 0
 100
-50.0
+3.0
 1
 1
 NIL
@@ -1435,7 +1434,7 @@ show-best-solution-at-each-x-iteration
 show-best-solution-at-each-x-iteration
 10
 100
-10.0
+20.0
 10
 1
 NIL
@@ -1470,7 +1469,7 @@ SWITCH
 75
 use-roulette-wheel-selection?
 use-roulette-wheel-selection?
-0
+1
 1
 -1000
 
@@ -1496,7 +1495,7 @@ SWITCH
 172
 environmental-selection?
 environmental-selection?
-0
+1
 1
 -1000
 
